@@ -18,7 +18,6 @@ from copy import deepcopy
 from functools import wraps
 from operator import attrgetter
 
-from billiard import forking as _forking
 from billiard.util import register_after_fork
 from kombu.clocks import LamportClock
 from kombu.utils import cached_property
@@ -78,8 +77,8 @@ class Celery(object):
     def __init__(self, main=None, loader=None, backend=None,
                  amqp=None, events=None, log=None, control=None,
                  set_as_current=True, accept_magic_kwargs=False,
-                 tasks=None, broker=None, include=None, fixups=None,
-                 changes=None, **kwargs):
+                 tasks=None, broker=None, include=None, changes=None,
+                 fixups=None, **kwargs):
         self.clock = LamportClock()
         self.main = main
         self.amqp_cls = amqp or self.amqp_cls

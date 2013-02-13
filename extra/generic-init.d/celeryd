@@ -37,7 +37,7 @@ fi
 
 # Sets --app argument for CELERY_BIN
 CELERY_APP_ARG=""
-if [ ! -z "$CELERY_APP"]; then
+if [ ! -z "$CELERY_APP" ]; then
     CELERY_APP_ARG="--app=$CELERY_APP"
 fi
 
@@ -209,7 +209,7 @@ case "$1" in
         check_paths
     ;;
     *)
-        echo "Usage: /etc/init.d/celeryd {start|stop|restart|kill|create_paths}"
+        echo "Usage: /etc/init.d/celeryd {start|stop|restart|kill|create-paths}"
         exit 64  # EX_USAGE
     ;;
 esac

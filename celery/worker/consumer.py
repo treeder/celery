@@ -120,6 +120,8 @@ class Consumer(object):
     #: as sending heartbeats.
     timer = None
 
+    restart_count = -1  # first start is the same as a restart
+
     class Namespace(bootsteps.Namespace):
         name = 'Consumer'
         default_steps = [
@@ -157,6 +159,7 @@ class Consumer(object):
 
         self._does_info = logger.isEnabledFor(logging.INFO)
         self._quick_put = self.ready_queue.put
+        self.amqheartbeat_rate = self.app.conf.BROKER_HEARTBEAT_CHECKRATE
 
         if hub:
             self.amqheartbeat = amqheartbeat
@@ -186,6 +189,7 @@ class Consumer(object):
     def start(self):
         ns, loop = self.namespace, self.loop
         while ns.state != CLOSE:
+            self.restart_count += 1
             maybe_shutdown()
             try:
                 ns.start(self)
@@ -216,7 +220,7 @@ class Consumer(object):
                 self.strategies, self.namespace, self.hub, self.qos,
                 self.amqheartbeat, self.handle_unknown_message,
                 self.handle_unknown_task, self.handle_invalid_task,
-                self.app.clock)
+                self.app.clock, self.amqheartbeat_rate)
 
     def on_poll_init(self, hub):
         hub.update_readers(self.connection.eventmap)

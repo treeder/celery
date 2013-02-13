@@ -366,9 +366,9 @@ Using multiple memcached servers:
 .. setting:: CELERY_CACHE_BACKEND_OPTIONS
 
 
-The "dummy" backend stores the cache in memory only:
+The "memory" backend stores the cache in memory only:
 
-    CELERY_CACHE_BACKEND = "dummy"
+    CELERY_CACHE_BACKEND = "memory"
 
 CELERY_CACHE_BACKEND_OPTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -816,8 +816,22 @@ and this requires the :mod:`amqp` module:
     $ pip install amqp
 
 The default heartbeat value is 10 seconds,
-the heartbeat will then be monitored at double the rate of the heartbeat value
+the heartbeat will then be monitored at the interval specified
+by the :setting:`BROKER_HEARTBEAT_CHECKRATE` setting, which by default is
+double the rate of the heartbeat value
 (so for the default 10 seconds, the heartbeat is checked every 5 seconds).
+
+.. setting:: BROKER_HEARTBEAT_CHECKRATE
+
+BROKER_HEARTBEAT_CHECKRATE
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+:transports supported: ``pyamqp``
+
+At intervals the worker will monitor that the broker has not missed
+too many heartbeats.  The rate at which this is checked is calculated
+by dividing the :setting:`BROKER_HEARTBEAT` value with this value,
+so if the heartbeat is 10.0 and the rate is the default 2.0, the check
+will be performed every 5 seconds (twice the heartbeat sending rate).
 
 .. setting:: BROKER_USE_SSL
 
